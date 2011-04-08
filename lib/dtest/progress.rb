@@ -63,7 +63,6 @@ module DTest
           unless r.empty? && r.ba_empty?
             test << r
           end
-
         end
 
         unless result.ba_empty? && test.empty?

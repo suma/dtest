@@ -1,14 +1,23 @@
+require 'dtest/failure'
+
 module DTest
 
   module Test
-    class Failure < Array
+    class Failure
+      def initialize
+        @failure = []
+      end
 
-      def add_failure(e)
-        self << e
+      def <<(s)
+        @failure << s
+      end
+
+      def empty?
+        @failure.empty?
       end
 
       def failure
-        self
+        @failure
       end
     end
 
@@ -36,7 +45,7 @@ module DTest
         @nane = name
         @message = message
 
-        @file, @line, @error_line = failure_line(backtrace)
+        @file, @line, @error_line = DTest::failure_line(backtrace)
       end
 
       def location

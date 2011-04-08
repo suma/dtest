@@ -117,7 +117,7 @@ TestCase "testcase3" do
   # Global Abort when assertion failed
   # specify abort scope to :assert_abort option
   #   :global, :testcase or :test
-  test "assert GlobalAbort", :assert_abort => :global do
+  test "GlobalAbort", :assert_abort => :global do
     assert_equal(1, 100)
   end
 end

@@ -1,6 +1,6 @@
 
 module DTest
-  def parse_caller(at)
+  def self.parse_caller(at)
     if /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
       file = $1
       line = $2.to_i
@@ -11,7 +11,7 @@ module DTest
     end
   end
 
-  def failure_line(backtrace)
+  def self.failure_line(backtrace)
     file, line, method = parse_caller(backtrace)
     if file && line && File.exists?(file)
       [file, line, File.readlines(file)[line - 1].strip]
@@ -20,7 +20,8 @@ module DTest
     end
   end
 
-  def failure_caller(level)
+  def self.failure_caller(level)
     failure_line(caller(level).first)
   end
 end # DTest
+
