@@ -6,9 +6,10 @@ DTest is a testing tool to describe integrating test for distributed systems.
 
 == Features
 
+* TestCase and Test executed order by defined
 * Assertion and Expectation
 * value-parameterized test like Google Test
-* Report XML output for Hudons/Jenkins
+* Report XML output for Hudson/Jenkins
 * You can specify abort scope Test, Testcase and Global
 
 == TODO
