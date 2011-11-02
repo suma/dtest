@@ -1,6 +1,5 @@
-require 'dtest/dsl'
-require 'dtest/runner'
 include DTest
+
 
 describe Global::Manager, 'global before/after exception' do
   before do

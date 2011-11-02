@@ -20,8 +20,5 @@ module DTest
     end
   end
 
-  def self.failure_caller(level)
-    failure_line(caller(level).first)
-  end
 end # DTest
 

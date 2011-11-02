@@ -1,9 +1,5 @@
-
-require 'dtest/dsl'
-require 'dtest/runner'
+require File.expand_path(File.join('.', 'spec_helper'), File.dirname(__FILE__))
 include DTest
-
-
 #
 # グローバル、テストケース、テスト before/after
 #  abortは3種類ある

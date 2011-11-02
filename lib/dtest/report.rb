@@ -31,11 +31,8 @@ module DTest
 
     # symbol to string
     def self.tag_s(tag)
-      if TAG_MAP.include?(tag)
-        text = TAG_MAP[tag]
-      else
-        text = tag.to_s
-      end
+      # must be in TAG_MAP.include?(tag)
+      TAG_MAP[tag]
     end
 
     def self.colored_tag(tag)

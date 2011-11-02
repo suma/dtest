@@ -10,12 +10,6 @@ RSpec::Core::RakeTask.new(:spec) do |spec|
   spec.ruby_opts = ['-rubygems'] if defined? Gem
 end
 
-RSpec::Core::RakeTask.new(:rcov) do |spec|
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.ruby_opts = ['-rubygems'] if defined? Gem
-  spec.rcov = true
-end
-
 task :default => :spec
 
 
