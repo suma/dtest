@@ -1,11 +1,28 @@
 
 
+require 'optparse'
 require 'dtest/core'
 require 'dtest/progress'
 
 module DTest
   class Runner
-    def self.run(files)
+    def self.parse!(argv)
+      # Command line parser
+      res = {}
+      xml_path = nil
+      opt = OptionParser.new
+      opt.on('--color') do |b|
+        DTest::Report.color_enabled = b
+      end
+      opt.on('--xml PATH') do |path|
+        res[:xml_path] = path
+      end
+      opt.parse!(ARGV)
+
+      res
+    end
+
+    def self.run(files = [])
       files.each do |file|
         load file
       end
