@@ -156,24 +156,30 @@ module DTest
 
     # abort
     def abort_if(condition, message = nil)
-      str = "Abort"
-      str += ": #{message}\n" if message
-      failed(str)
-      raise AbortTest.new(str) if condition
+      if condition
+        str = "Abort"
+        str += ": #{message}\n" if message
+        failed(str)
+        raise AbortTest.new(str)
+      end
     end
 
     def abort_case_if(condition, message = nil)
-      str = "Abort TestCase"
-      str += ": #{message}\n" if message
-      failed(str)
-      raise AbortTestCase.new(str) if condition
+      if condition
+        str = "Abort TestCase"
+        str += ": #{message}\n" if message
+        failed(str)
+        raise AbortTestCase.new(str)
+      end
     end
 
     def abort_global_if(condition, message = nil)
-      str = "Abort global"
-      str += ": #{message}\n" if message
-      failed(str)
-      raise AbortGlobal.new(str) if condition
+      if condition
+        str = "Abort global"
+        str += ": #{message}\n" if message
+        failed(str)
+        raise AbortGlobal.new(str)
+      end
     end
 
     private #internal methods
