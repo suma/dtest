@@ -29,6 +29,6 @@ EOF
   gem.require_paths = ['lib']
 
   gem.required_ruby_version = '>= 1.8.7'
-  gem.add_dependency "rake", ">= 0.9.2"
-  gem.add_dependency "rspec", ">= 1.2.3"
+  gem.add_development_dependency "rake", ">= 0.9.2"
+  gem.add_development_dependency "rspec", ">= 1.2.3"
 end
