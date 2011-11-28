@@ -1,4 +1,6 @@
 require 'dtest/failure'
+require 'rexml/document'
+require 'rexml/cdata'
 
 module DTest
 
@@ -181,7 +183,11 @@ module DTest
           end
         end
 
-        doc.write(REXML::Output.new(File.new(output_path, 'w+'), REXML::Encoding::UTF_8))
+        if RUBY_VERSION >= '1.9.3'
+          doc.write(REXML::Output.new(File.new(output_path, 'w+')))
+        else
+          doc.write(REXML::Output.new(File.new(output_path, 'w+'), REXML::Encoding::UTF_8))
+        end
       end
     end # class GlobalResult
 

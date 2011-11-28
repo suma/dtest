@@ -2,8 +2,6 @@
 
 require 'singleton'
 require 'time'
-require 'rexml/document'
-require 'rexml/cdata'
 
 require 'dtest/failure'
 require 'dtest/util'
