@@ -129,9 +129,11 @@ describe Global::Manager, 'dtest setter/getter' do
   before do
     GlobalHarness do
       before do
+        set :global_value, 54321
       end
 
       after do
+        assert_equal(54321, global_value) # PASS
       end
     end
   end
@@ -149,16 +151,23 @@ describe Global::Manager, 'dtest setter/getter' do
         set "member_modify", 12345
         assert_equal(12345, member_test)  # PASS
         assert_equal(12345, member_modify)# PASS
+        assert_equal(54321, global_value) # PASS
       end
 
       afterCase do
         assert_equal(12345, member_test)  # PASS
-        assert_equal(10000, member_modify)# PASS
+        assert_equal(10000, member_modify)# PASS(value is changed)
+        assert_equal(10000, global_value) # PASS(value is changed)
       end
 
-      test "modify_member" do
+      test "allow_modify_member" do
         assert_equal(12345, member_test)  # PASS
         set :member_modify, 10000
+      end
+
+      test "allow_modify_global" do
+        assert_equal(54321, global_value) # PASS
+        set :global_value, 10000
       end
     end
 
@@ -168,7 +177,7 @@ describe Global::Manager, 'dtest setter/getter' do
     global_report.result.size == 1
     cresult = global_report.result.first
     cresult.before_failure.failure.size.should == 0
-    cresult.result.size.should == 1
+    cresult.result.size.should == 2
     cresult.result[0].result.should == Test::Result::PASS
     cresult.after_failure.failure.size.should == 0
   end

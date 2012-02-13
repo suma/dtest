@@ -22,7 +22,8 @@ module DTest
 
       def start(testcases)
         # Progress
-        context = Context.new
+        global_values = Object.new
+        context = Context.new(global_values)
         Progress.setUpGlobal(testcases)
 
         global_result = Test::GlobalResult.new(testcases)
@@ -37,6 +38,7 @@ module DTest
 
             # execute cases
             testcases.each do |testcase|
+              testcase.defined_values = global_values.clone
               execute_testcase(global_result, testcase)
             end
           rescue AbortGlobal => e
@@ -65,6 +67,7 @@ module DTest
     class Manager
       include Singleton
       attr_accessor :harness
+      attr_accessor :defined
 
       def initialize
         clear
@@ -73,6 +76,7 @@ module DTest
       def clear
         remove_instance_var
         @harness = Harness.new
+        @defined = false
       end
 
       def before(option = {}, &block)

@@ -1,5 +1,23 @@
+require File.expand_path(File.join('.', 'spec_helper'), File.dirname(__FILE__))
 include DTest
 
+describe Global::Manager, 'GlobalHarness can only be defined once' do
+  after do
+    Global::Manager.instance.clear
+    Test::Manager.instance.clear
+  end
+
+  it "multiple_definition" do
+
+    GlobalHarness do
+    end
+    lambda {
+      GlobalHarness do
+      end
+    }.should raise_error(RuntimeError)
+
+  end
+end
 
 describe Global::Manager, 'global before/after exception' do
   before do

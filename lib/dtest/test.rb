@@ -10,6 +10,7 @@ module DTest
       attr_accessor :beforeCase, :afterCase
       attr_accessor :before, :after
       attr_accessor :test
+      attr_accessor :defined_values
 
       def initialize(name, beforeCase, afterCase, before, after, test)
         @name = name
