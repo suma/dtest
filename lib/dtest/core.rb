@@ -73,7 +73,10 @@ module DTest
         # getter value
         @__state[:let].send(name)
       else
-        super
+        file, line, error_line = DTest::failure_line(caller(1).first)
+        e = NameError.new("undefined local variable or method `#{name}'")
+        e.set_backtrace(["#{file}:#{line}", error_line])
+        raise e
       end
     end
 
