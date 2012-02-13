@@ -1,5 +1,6 @@
 
 require 'dtest/core'
+require 'dtest/failure'
 
 module DTest
   module DSL
@@ -11,7 +12,15 @@ module DTest
 
     def GlobalHarness(&block)
       manager = Global::Manager::instance
-      manager.instance_eval(&block)
+      if manager.defined
+        file, line, = DTest::failure_line(caller(1).first)
+        str = ['GlobalHarness can only be only defined once.']
+        str << " error at #{file}:#{line}" if file && line
+        raise str.join("\n")
+      else
+        manager.instance_eval(&block)
+        manager.defined = true
+      end
     end
   end # module DSL
 end # module DTest

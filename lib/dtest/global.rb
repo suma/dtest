@@ -67,6 +67,7 @@ module DTest
     class Manager
       include Singleton
       attr_accessor :harness
+      attr_accessor :defined
 
       def initialize
         clear
@@ -75,6 +76,7 @@ module DTest
       def clear
         remove_instance_var
         @harness = Harness.new
+        @defined = false
       end
 
       def before(option = {}, &block)
