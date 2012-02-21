@@ -16,10 +16,9 @@ DTest is a testing tool to describe integrating test for distributed systems.
 
 * support Ctrl-C interruption
 * TestCase value-parameterized
-* desigining instance variable valid scope
 
 == Copyright
 
-Copyright (c) 2011 Shuzo Kashihara. See LICENSE.txt for
+Copyright (c) 2012 Shuzo Kashihara. See LICENSE.txt for
 further details.
 
