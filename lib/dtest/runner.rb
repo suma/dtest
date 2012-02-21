@@ -17,7 +17,7 @@ module DTest
       opt.on('--xml PATH') do |path|
         res[:xml_path] = path
       end
-      opt.parse!(ARGV)
+      opt.parse!(argv)
 
       res
     end
