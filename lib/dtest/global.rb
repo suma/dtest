@@ -1,3 +1,6 @@
+require 'singleton'
+require 'dtest/util'
+require 'dtest/progress'
 
 module DTest
   module Global

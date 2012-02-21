@@ -1,5 +1,5 @@
-
-require 'dtest/core'
+require 'dtest/test'
+require 'dtest/global'
 require 'dtest/failure'
 
 module DTest

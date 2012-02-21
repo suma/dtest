@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'singleton'
 require 'time'
 
 require 'dtest/failure'
@@ -258,7 +257,7 @@ END
       }, @block)
     end
 
-  end # class Context
+  end # class Block
 
 end # module DTest
 
