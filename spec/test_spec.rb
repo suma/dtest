@@ -71,7 +71,7 @@ describe Global::Manager, 'dtest instance' do
 
     global_report = Runner.run([])
 
-    global_report.result.size == 1
+    global_report.result.size.should == 1
     cresult = global_report.result[0]
     cresult.before_failure.failure.size.should == 0
     cresult.after_failure.failure.size.should == 0
