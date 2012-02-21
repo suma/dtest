@@ -9,6 +9,7 @@ require 'dtest/runner'
 def dtest_clear_instance
   Global::Manager.instance.clear
   Test::Manager.instance.clear
+  SharedContext::Manager.instance.clear
 end
 
 shared_context 'dtest' do
