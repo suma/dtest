@@ -2,12 +2,7 @@ require File.expand_path(File.join('.', 'spec_helper'), File.dirname(__FILE__))
 include DTest
 
 describe Global::Manager, 'dtest instance' do
-  before do
-  end
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
-  end
+  include_context 'dtest'
 
   it "global context" do
     GlobalHarness do
@@ -126,6 +121,8 @@ describe Global::Manager, 'dtest instance' do
 end
 
 describe Global::Manager, 'dtest setter/getter' do
+  include_context 'dtest'
+
   before do
     GlobalHarness do
       before do
@@ -136,11 +133,6 @@ describe Global::Manager, 'dtest setter/getter' do
         assert_equal(54321, global_value) # PASS
       end
     end
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "testcase_to_test" do
@@ -185,6 +177,8 @@ end
 
 
 describe Global::Manager, 'test global' do
+  include_context 'dtest'
+
   before do
     $call = []
     GlobalHarness do
@@ -196,11 +190,6 @@ describe Global::Manager, 'test global' do
         $call << :afterGlobal
       end
     end
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "global before/after should be executed" do

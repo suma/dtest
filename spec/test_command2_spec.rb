@@ -4,6 +4,5 @@ ARGV.slice!(0..-1)
 begin
   load 'dtest/command.rb'
 ensure
-  DTest::Global::Manager.instance.clear
-  DTest::Test::Manager.instance.clear
+  dtest_clear_instance
 end

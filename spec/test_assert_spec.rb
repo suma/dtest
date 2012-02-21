@@ -2,14 +2,10 @@ require File.expand_path(File.join('.', 'spec_helper'), File.dirname(__FILE__))
 include DTest
 
 describe Global::Manager, 'test assert' do
+  include_context 'dtest'
 
   before do
     $call = []
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "assert global before" do

@@ -2,6 +2,7 @@ require File.expand_path(File.join('.', 'spec_helper'), File.dirname(__FILE__))
 include DTest
 
 describe Global::Manager, 'GlobalHarness can only be defined once' do
+  include_context 'dtest'
   after do
     Global::Manager.instance.clear
     Test::Manager.instance.clear
@@ -20,13 +21,9 @@ describe Global::Manager, 'GlobalHarness can only be defined once' do
 end
 
 describe Global::Manager, 'global before/after exception' do
+  include_context 'dtest'
   before do
     $call = []
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "global_before" do
@@ -65,6 +62,7 @@ end
 
 
 describe Global::Manager, 'test before/after exception' do
+  include_context 'dtest'
   before do
     $call = []
     GlobalHarness do
@@ -75,11 +73,6 @@ describe Global::Manager, 'test before/after exception' do
         $call << :afterGlobal
       end
     end
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "testcase:beforeCase" do
@@ -193,6 +186,7 @@ end
 
 
 describe Global::Manager, 'exception catch' do
+  include_context 'dtest'
   before do
     $call = []
 
