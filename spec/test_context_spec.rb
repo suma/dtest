@@ -15,8 +15,6 @@ describe SharedContext::Manager, 'dtest define shared_context' do
 
     lambda {
       SharedContext 'hello' do
-        def hoge
-        end
       end
     }.should raise_error(RuntimeError)
   end
@@ -43,6 +41,22 @@ describe Global::Manager, 'dtest include_context' do
         'hello_overwrite'
       end
     end
+  end
+
+  it "missing to include undefined context" do
+    lambda {
+      GlobalHarness do
+        include_context 'undefined_context'
+      end
+    }.should raise_error(RuntimeError)
+  end
+
+  it "missing to include undefined context" do
+    lambda {
+      TestCase 'testcase' do
+        include_context 'undefined'
+      end
+    }.should raise_error(RuntimeError)
   end
 
   it "global context" do
@@ -99,6 +113,11 @@ describe Global::Manager, 'dtest include_context' do
     cresult = global_report.result.first
     cresult.before_failure.failure.size.should == 0
     cresult.after_failure.failure.size.should == 0
+
+    result = cresult.result
+    result[0].before_failure.failure.size.should == 0
+    result[0].after_failure.failure.size.should == 0
+    result[0].failure.size.should == 0
   end
 
 
