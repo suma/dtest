@@ -149,7 +149,7 @@ module DTest
       end
 
       unless raised_expected_error
-        str = "exception expected #{errors.to_s} but #{actual_error.inspect}\n"
+        str = "exception expected #{errors.join(', ')} but #{actual_error.inspect}\n"
         failed(str)
       end
     end
