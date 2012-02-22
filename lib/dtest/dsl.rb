@@ -1,6 +1,7 @@
-
-require 'dtest/core'
+require 'dtest/test'
+require 'dtest/global'
 require 'dtest/failure'
+require 'dtest/shared_context'
 
 module DTest
   module DSL
@@ -21,6 +22,11 @@ module DTest
         manager.instance_eval(&block)
         manager.defined = true
       end
+    end
+
+    def SharedContext(name, option = {}, &block)
+      manager = SharedContext::Manager::instance
+      manager.add(name, option, &block)
     end
   end # module DSL
 end # module DTest

@@ -3,13 +3,9 @@ include DTest
 
 
 describe Global::Manager, 'execpted' do
+  include_context 'dtest'
   before do
     $call = []
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "test expect_true" do
@@ -204,6 +200,7 @@ end
 
 
 describe Global::Manager, 'expect failure count' do
+  include_context 'dtest'
   before do
     GlobalHarness do
       before do
@@ -212,11 +209,6 @@ describe Global::Manager, 'expect failure count' do
       after do
       end
     end
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "fail_before" do

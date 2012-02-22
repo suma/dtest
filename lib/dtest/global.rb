@@ -1,3 +1,6 @@
+require 'singleton'
+require 'dtest/util'
+require 'dtest/progress'
 
 module DTest
   module Global
@@ -6,10 +9,12 @@ module DTest
 
       attr_accessor :global
       attr_accessor :before, :after
+      attr_accessor :shared_contexts
 
       def initialize
         @before = []
         @after = []
+        @shared_contexts = []
       end
 
       def execute_after(list, context)
@@ -24,6 +29,15 @@ module DTest
         # Progress
         global_values = Object.new
         context = Context.new(global_values)
+
+        unless @shared_contexts.empty?
+          i = DTest::SharedContext::Manager::instance
+          @shared_contexts.each { |name|
+            context.instance_eval(&i.contexts[name])
+          }
+          context
+        end
+
         Progress.setUpGlobal(testcases)
 
         global_result = Test::GlobalResult.new(testcases)
@@ -38,6 +52,7 @@ module DTest
 
             # execute cases
             testcases.each do |testcase|
+              testcase.shared_contexts = shared_contexts
               testcase.defined_values = global_values.clone
               execute_testcase(global_result, testcase)
             end
@@ -77,6 +92,14 @@ module DTest
         remove_instance_var
         @harness = Harness.new
         @defined = false
+      end
+
+      def include_context(name)
+        if DTest::SharedContext::Manager::instance.has_key?(name)
+          @harness.shared_contexts << name unless @harness.shared_contexts.include?(name)
+        else
+          raise "#{name} context is not defined"
+        end
       end
 
       def before(option = {}, &block)

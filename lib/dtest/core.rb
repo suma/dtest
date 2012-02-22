@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'singleton'
 require 'time'
 
 require 'dtest/failure'
@@ -73,7 +72,10 @@ module DTest
         # getter value
         @__state[:let].send(name)
       else
-        super
+        file, line, error_line = DTest::failure_line(caller(1).first)
+        e = NameError.new("undefined local variable or method `#{name}'")
+        e.set_backtrace(["#{file}:#{line}", error_line])
+        raise e
       end
     end
 
@@ -147,7 +149,7 @@ module DTest
       end
 
       unless raised_expected_error
-        str = "exception expected #{errors.to_s} but #{actual_error.inspect}\n"
+        str = "exception expected #{errors.join(', ')} but #{actual_error.inspect}\n"
         failed(str)
       end
     end
@@ -255,7 +257,7 @@ END
       }, @block)
     end
 
-  end # class Context
+  end # class Block
 
 end # module DTest
 

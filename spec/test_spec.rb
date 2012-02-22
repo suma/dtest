@@ -2,12 +2,7 @@ require File.expand_path(File.join('.', 'spec_helper'), File.dirname(__FILE__))
 include DTest
 
 describe Global::Manager, 'dtest instance' do
-  before do
-  end
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
-  end
+  include_context 'dtest'
 
   it "global context" do
     GlobalHarness do
@@ -37,7 +32,7 @@ describe Global::Manager, 'dtest instance' do
     global_report = Runner.run([])
     global_report.after_failure.failure.size.should == 1
 
-    global_report.result.size == 1
+    global_report.result.size.should == 1
     cresult = global_report.result.first
 
     cresult.before_failure.failure.size.should == 0
@@ -76,12 +71,12 @@ describe Global::Manager, 'dtest instance' do
 
     global_report = Runner.run([])
 
-    global_report.result.size == 1
+    global_report.result.size.should == 1
     cresult = global_report.result[0]
     cresult.before_failure.failure.size.should == 0
     cresult.after_failure.failure.size.should == 0
 
-    cresult.result.size == 1
+    cresult.result.size.should == 1
     cresult.passed.should == 1
     cresult.failed.should == 0
   end
@@ -112,20 +107,22 @@ describe Global::Manager, 'dtest instance' do
 
     global_report = Runner.run([])
 
-    global_report.result.size == 1
+    global_report.result.size.should == 1
     cresult = global_report.result.first
-    cresult.result.size == 2
+    cresult.result.size.should == 2
     result = cresult.result
-    result[0].before_failure.failure.size == 1
-    result[0].after_failure.failure.size == 1
-    result[0].failure.size == 0
-    result[1].before_failure.failure.size == 1
-    result[1].after_failure.failure.size == 1
-    result[1].failure.size == 1
+    result[0].before_failure.failure.size.should == 0
+    result[0].after_failure.failure.size.should == 1
+    result[0].failure.size.should == 0
+    result[1].before_failure.failure.size.should == 0
+    result[1].after_failure.failure.size.should == 1
+    result[1].failure.size.should == 1
   end
 end
 
 describe Global::Manager, 'dtest setter/getter' do
+  include_context 'dtest'
+
   before do
     GlobalHarness do
       before do
@@ -136,11 +133,6 @@ describe Global::Manager, 'dtest setter/getter' do
         assert_equal(54321, global_value) # PASS
       end
     end
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "testcase_to_test" do
@@ -174,7 +166,7 @@ describe Global::Manager, 'dtest setter/getter' do
     global_report = Runner.run([])
     global_report.after_failure.failure.size.should == 0
 
-    global_report.result.size == 1
+    global_report.result.size.should == 1
     cresult = global_report.result.first
     cresult.before_failure.failure.size.should == 0
     cresult.result.size.should == 2
@@ -185,6 +177,8 @@ end
 
 
 describe Global::Manager, 'test global' do
+  include_context 'dtest'
+
   before do
     $call = []
     GlobalHarness do
@@ -196,11 +190,6 @@ describe Global::Manager, 'test global' do
         $call << :afterGlobal
       end
     end
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "global before/after should be executed" do

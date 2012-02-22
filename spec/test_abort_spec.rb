@@ -9,13 +9,10 @@ include DTest
 
 
 describe Global::Manager, 'global abort' do
+  include_context 'dtest'
+
   before do
     $call = []
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "global before abort_if" do
@@ -99,6 +96,8 @@ describe Global::Manager, 'global abort' do
 end
 
 describe Global::Manager, 'testcase abort' do
+  include_context 'dtest'
+
   before do
     $call = []
     GlobalHarness do
@@ -109,11 +108,6 @@ describe Global::Manager, 'testcase abort' do
         $call << :afterGlobal
       end
     end
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   # before: abort_if, abort_case_if, abort_global_if
@@ -423,6 +417,8 @@ end
 
 
 describe Global::Manager, 'test abort' do
+  include_context 'dtest'
+
   before do
     $call = []
     GlobalHarness do
@@ -434,12 +430,6 @@ describe Global::Manager, 'test abort' do
       end
     end
   end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
-  end
-
 
   it "test:after abort_if" do
     TestCase "abortcase1" do
@@ -588,6 +578,8 @@ end
 
 
 describe Global::Manager, 'test abort' do
+  include_context 'dtest'
+
   before do
     $call = []
     GlobalHarness do
@@ -599,11 +591,6 @@ describe Global::Manager, 'test abort' do
         $call << :afterGlobal
       end
     end
-  end
-
-  after do
-    Global::Manager.instance.clear
-    Test::Manager.instance.clear
   end
 
   it "test abort_if" do

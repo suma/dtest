@@ -1,4 +1,5 @@
-
+require 'singleton'
+require 'dtest/util'
 require 'dtest/progress'
 
 module DTest
@@ -11,8 +12,9 @@ module DTest
       attr_accessor :before, :after
       attr_accessor :test
       attr_accessor :defined_values
+      attr_accessor :shared_contexts
 
-      def initialize(name, beforeCase, afterCase, before, after, test)
+      def initialize(name, beforeCase, afterCase, before, after, test, local_contexts)
         @name = name
         @beforeCase = beforeCase
         @afterCase = afterCase
@@ -20,9 +22,25 @@ module DTest
         @after = after
         @test = test
         @defined_values = Object.new
+        @shared_contexts = []
+        @local_contexts = local_contexts
       end
 
       private
+      def create_context
+        context = Context.new(@defined_values)
+
+        contexts = @shared_contexts + @local_contexts
+        unless contexts.empty?
+          i = DTest::SharedContext::Manager::instance
+          contexts.each { |name|
+            context.instance_eval(&i.contexts[name])
+          }
+        end
+
+        context
+      end
+
       def execute_after_case(list, context)
         begin
           exec(list, context)
@@ -40,58 +58,10 @@ module DTest
         end
       end
 
-      public
-      def execute(global_result)
-        # TestCase result
-        caseresult = CaseResult.new(@name)
-        global_result.add(caseresult)
-
-        # set result
-        @beforeCase.each {|b| b.result = caseresult.before_failure }
-        @afterCase.each {|b| b.result = caseresult.after_failure }
-
-        Progress.setUpTestCase(name, @test.size)
-          executed = 0
-          passed = 0
-          context = Context.new(@defined_values)
-
-          begin
-            caseresult.timer {
-              # execute beforeCase
-              exec(@beforeCase, context)
-
-              # execute each test
-              @test.each do |test|
-                executed += 1
-                result = Result.new(test.name)
-                caseresult.add(result)
-                execute_test(result, test)
-                passed += 1 if result.result == Result::PASS
-              end
-            } # Stopwatch::timer
-          rescue AbortTestCase
-            # にぎりつぶす
-          ensure
-            # report
-            caseresult.passed = passed
-            caseresult.failed = executed - passed
-            caseresult.executed = executed
-            caseresult.untested = @test.size - executed
-
-            # execute afterCase
-            begin
-              execute_after_case(@afterCase, context)
-            ensure
-              # report testcase finished
-              Progress.tearDownTestCase(name, executed, caseresult.elapsed)
-            end
-          end
-      end
-
       def execute_test(result, test)
         Progress.test(@name, test.name)
 
-        context = Context.new(@defined_values)
+        context = create_context
 
         # set result
         @before.each {|b| b.result = result.before_failure }
@@ -127,6 +97,55 @@ module DTest
           end
         end
       end
+
+      public
+      def execute(global_result)
+        # TestCase result
+        caseresult = CaseResult.new(@name)
+        global_result.add(caseresult)
+
+        # set result
+        @beforeCase.each {|b| b.result = caseresult.before_failure }
+        @afterCase.each {|b| b.result = caseresult.after_failure }
+
+        Progress.setUpTestCase(name, @test.size)
+          executed = 0
+          passed = 0
+          context = create_context
+
+          begin
+            caseresult.timer {
+              # execute beforeCase
+              exec(@beforeCase, context)
+
+              # execute each test
+              @test.each do |test|
+                executed += 1
+                result = Result.new(test.name)
+                caseresult.add(result)
+                execute_test(result, test)
+                passed += 1 if result.result == Result::PASS
+              end
+            } # Stopwatch::timer
+          rescue AbortTestCase
+            # にぎりつぶす
+          ensure
+            # report
+            caseresult.passed = passed
+            caseresult.failed = executed - passed
+            caseresult.executed = executed
+            caseresult.untested = @test.size - executed
+
+            # execute afterCase
+            begin
+              execute_after_case(@afterCase, context)
+            ensure
+              # report testcase finished
+              Progress.tearDownTestCase(name, executed, caseresult.elapsed)
+            end
+          end
+      end
+
     end # class Case
 
     class Manager
@@ -151,6 +170,7 @@ module DTest
         @before = []
         @after = []
         @test = []
+        @contexts = []
       end
 
       def beforeCase(option = {}, &block)
@@ -184,6 +204,14 @@ module DTest
         end
       end
 
+      def include_context(name)
+        if DTest::SharedContext::Manager::instance.has_key?(name)
+          @contexts << name unless @contexts.include?(name)
+        else
+          raise "#{name} context is not defined"
+        end
+      end
+
       def test(name, option = {}, &block)
         if option && option[:params]
           # value-parameterized test
@@ -205,7 +233,7 @@ module DTest
         (@beforeCase + @afterCase + @before + @after + @test).each do |block|
           block.parent = name
         end
-        @cases << Case.new(name, @beforeCase, @afterCase, @before, @after, @test)
+        @cases << Case.new(name, @beforeCase, @afterCase, @before, @after, @test, @contexts)
         flush
       end
     end # class Manager
