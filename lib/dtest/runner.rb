@@ -8,7 +8,6 @@ module DTest
     def self.parse!(argv)
       # Command line parser
       res = {}
-      xml_path = nil
       opt = OptionParser.new
       opt.banner = <<EOS
 =====================================
