@@ -20,7 +20,7 @@ module DTest
       def execute_after(list, context)
         begin
           exec(list, context)
-        rescue StandardError, Exception => e
+        rescue StandardError, Exception
           # にぎりつぶす
         end
       end

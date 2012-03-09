@@ -12,8 +12,7 @@ require 'dtest/global'
 
 module DTest
 
-  class Abort < Exception
-  end
+  class Abort < Exception; end
 
   class AbortTest < Abort
     def to_s
@@ -43,9 +42,9 @@ module DTest
       @__state = @__state.merge(state)
       begin
         instance_eval(&block)
-      rescue AbortTest, AbortTestCase, AbortGlobal => e
+      rescue AbortTest, AbortTestCase, AbortGlobal
         # スルー
-        raise e
+        raise
       rescue StandardError, Exception => e
         # ブロック内の例外はabortとして処理する　
         catch_exception(e)
