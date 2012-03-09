@@ -3,6 +3,22 @@ require 'dtest/util'
 require 'dtest/progress'
 
 module DTest
+  class InterruptExecution < Interrupt; end
+  def self.install_signal_int(count = 2)
+    Signal.trap(:INT) {
+      @@interrupt_count ||= 1
+      raise InterruptExecution if @@interrupt_count >= count
+
+      if false # TODO: implement test stop
+        # interrupt_abort_target = :testcase, :global =>
+        DTest::Progress.warn 'Test goes shutdown safely abort [#{interrupt_mode}] mode. If you want to force to interrupt dtest by force, press Ctrl-C again'
+      else
+        DTest::Progress.warn 'If you want continue interrupting, press Ctrl-C again'
+      end
+      @@interrupt_count += 1
+    }
+  end
+
   module Test
     class Case
       include Hook

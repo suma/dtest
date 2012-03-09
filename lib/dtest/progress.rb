@@ -3,6 +3,10 @@ require 'dtest/report'
 
 module DTest
   class Progress
+    def self.warn(message)
+      Report.tag :warn, message
+    end
+
     def self.test_str(test_size)
       test_str = test_size > 1 ? 'tests' : 'test'
       "#{test_size} #{test_str}"

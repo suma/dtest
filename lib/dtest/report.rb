@@ -5,6 +5,7 @@ module DTest
     TAG_BASE = [
       'Global', 'TestCase', 'Test', 'RUN', 'OK', 'FAIL',
       'PASSED', 'FAILED', 'TESTED', 'UNTEST',
+      'WARN',
     ]
     TAG_S = TAG_BASE.map {|t| " #{t} "}
     MAX_LEN = TAG_S.map {|s| s.size}.max
@@ -27,6 +28,9 @@ module DTest
       :failed => :green,
       :tested => :green,
       :untest => :green,
+
+      # dtest message
+      :warn => :red,
     }
 
     # symbol to string

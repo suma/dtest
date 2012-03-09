@@ -14,6 +14,9 @@ optparse, option = DTest::Runner.parse!(argv)
 if argv.empty? && !option[:print]
   puts optparse
 elsif !option[:print]
+  # Install SIGINT handler to shutdown safely
+  DTest.install_signal_int
+
   # execute test
   res = DTest::Runner.run(argv)
   DTest::Runner.report(res)
