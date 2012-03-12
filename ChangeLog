@@ -1,0 +1,32 @@
+
+Developing 0.0.6
+	* Added SIGINT(Ctrl-C) handler
+	* Fixed usage message
+
+Released 0.0.5 at February 22, 2012
+	* Added a concept of SharedContext support.
+	  Thanks Masahiro Nakagawa for an advice about RSpec's shared_context,
+	  and I was inspired many times by RSpec
+	* Fixed CUI options to through comamnd line argument for targets
+	* Some bugfixes
+
+Released 0.0.4 at February 12, 2012
+	* Added GlobalHarness 'use' variable semantics
+
+Released 0.0.3 at November 15, 2011
+	* Support Ruby 1.9.3
+	* Fixed to show message when abort using 'abort_if'
+
+Released 0.0.2 at November 9, 2011
+	* Refactored some specs
+
+Released 0.0.1 at November 1, 2011
+	* First rubygem release
+
+Released 0.0.0 at April 8, 2011
+	* First release
+	* Thank you Nobuyuki Kubota and Preferred Infrastrcture, Inc.
+
+
+--
+`Bushido is the way of death' by Yamamoto Jocho(In the bushido book of Hagakure)
